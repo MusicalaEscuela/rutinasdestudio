@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rutinas de Estudio · Musicala</title>
+  <meta name="description" content="Plan de práctica musical con técnico, teórico y obras (50/50), alternancia A/B automática y horario semanal con hora y duración." />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ===== Identidad Musicala (tema claro) ===== */
+    :root{
+      --azul-mozart:#0C41C4;
+      --violeta-beethoven:#680DBF;
+      --violeta-vivaldi:#5729FF;
+      --magenta-brahms:#CE0071;
+      --azul-wagner:#0C0A1E;
+      --gris-haydn:#E6E8E8;
+      --blanco-debussy:#F9F9F9;
+
+      --bg:#ffffff;
+      --ink:#0C0A1E;
+      --muted:#495063;
+      --line:#E3E6F2;
+      --card:#ffffff;
+      --chip:#F3F5FF;
+      --brand:var(--azul-mozart);
+      --accent:var(--violeta-beethoven);
+      --ok:#28a745;
+      --warn:#ffb703;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:Roboto,system-ui,Segoe UI,Arial,sans-serif}
+    a{color:inherit}
+    .wrap{max-width:1120px;margin:28px auto 80px;padding:0 16px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+    .head-left{display:flex;gap:12px;align-items:center}
+    .logo{width:44px;height:44px;border-radius:10px;object-fit:contain;background:#fff;padding:4px;border:1px solid #ddd}
+    h1{font-size:26px;letter-spacing:.2px;margin:0}
+    .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+
+    .pill{background:var(--chip);border:1px solid #D7DBFF;color:#25306b;padding:6px 10px;border-radius:999px;font-size:12px}
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:16px;
+      box-shadow:0 10px 24px rgba(12,20,33,.06);
+    }
+    .card h2{margin:2px 0 10px;font-size:18px}
+    .hint{color:var(--muted);font-size:13px}
+    .sep{height:1px;background:var(--line);margin:10px 0}
+
+    .btn{
+      appearance:none;cursor:pointer;border:none;
+      background:linear-gradient(90deg,var(--brand),var(--accent));
+      color:#fff;border-radius:12px;padding:10px 14px;font-weight:600;
+      box-shadow:0 6px 16px rgba(12,65,196,.18);
+    }
+    .btn.small{padding:8px 10px;border-radius:10px;font-size:13px}
+    .btn.ghost{background:#fff;border:1px solid #D7DBFF;color:#22306a}
+
+    input[type="number"], input[type="text"], input[type="time"], textarea, select{
+      width:100%;background:#fff;color:var(--ink);
+      border:1px solid #CFD6FF;border-radius:12px;padding:10px 12px;outline:none;font-size:14px
+    }
+
+    .bar{height:10px;background:#F1F3FF;border:1px solid #DFE4FF;border-radius:999px;overflow:hidden}
+    .bar span{display:block;height:100%}
+    .b-tech{background:#3AA7FF}
+    .b-theo{background:#55C07A}
+    .b-work{background:#FFB86B}
+
+    .badge{background:#F6F7FF;border:1px solid #DFE4FF;padding:4px 10px;border-radius:999px;font-size:12px}
+
+    .grid{display:grid;gap:16px}
+    @media(min-width:920px){ .grid.cols-2{grid-template-columns:1.2fr 1fr} }
+    .two{display:grid;gap:12px}
+    @media(min-width:760px){ .two{grid-template-columns:1fr 1fr}}
+
+    .table{border:1px solid var(--line);border-radius:14px;overflow:hidden}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:10px;border-bottom:1px solid var(--line);text-align:left}
+    th{background:#F7F8FE;color:#26315e}
+    tr:last-child td{border-bottom:none}
+
+    .sticky{
+      position:sticky;top:0;z-index:30;margin-bottom:12px;
+      background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 12px;display:flex;gap:10px;align-items:center
+    }
+    .sticky strong{color:#1f2752}
+
+    .chips{display:flex;gap:8px;flex-wrap:wrap}
+    .chip{background:#F7F8FE;border:1px solid #E1E5FF;padding:6px 10px;border-radius:999px;font-size:12px;color:#2c3170}
+
+    .footer{margin-top:18px;font-size:12px;color:#5a6180}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="head-left">
+        <img src="logo.png" alt="Logo Musicala" class="logo" />
+        <div>
+          <h1>Rutinas de Estudio · Musicala</h1>
+          <div class="row">
+            <span class="pill">Técnico + Teórico = 50%</span>
+            <span class="pill">Obras = 50%</span>
+            <span class="pill">Alternancia A/B automática</span>
+          </div>
+        </div>
+      </div>
+      <button class="btn small" id="btn-reset">Reiniciar datos</button>
+    </header>
+
+    <!-- Banner: calentamiento y estiramiento -->
+    <div class="sticky" role="note" aria-live="polite">
+      <span>🧘‍♀️</span>
+      <div>
+        <strong>Siempre antes de practicar:</strong>
+        <span class="hint">5–10 min de <b>calentamiento</b> y <b>estiramiento</b> (cuello, hombros, espalda, manos, respiración) para cuidar el cuerpo.</span>
+      </div>
+    </div>
+
+    <!-- Plan rápido de hoy -->
+    <section class="card">
+      <h2>Plan rápido de hoy</h2>
+      <p class="hint">Escribe cuántos minutos vas a practicar y te proponemos el reparto. <b>Técnico+Teórico</b> suman el 50% y <b>Obras</b> la otra mitad.</p>
+      <div class="two">
+        <div>
+          <label class="hint">Minutos de práctica hoy</label>
+          <div class="row">
+            <input type="number" id="minutos-hoy" min="5" step="5" placeholder="p. ej., 20" />
+            <button class="btn" id="btn-calcular">Calcular</button>
+          </div>
+          <div class="sep"></div>
+          <div class="row"><span>🎯 Técnico</span> <span id="out-tech" class="badge">0 min</span></div>
+          <div class="row"><span>📚 Teórico</span> <span id="out-theo" class="badge">0 min</span></div>
+          <div class="row"><span>🎵 Obras</span> <span id="out-work" class="badge">0 min</span></div>
+          <div class="sep"></div>
+          <div class="bar" aria-hidden="true"><span id="bar-tech" class="b-tech" style="width:0%"></span></div>
+          <div class="bar" style="margin-top:6px" aria-hidden="true"><span id="bar-theo" class="b-theo" style="width:0%"></span></div>
+          <div class="bar" style="margin-top:6px" aria-hidden="true"><span id="bar-work" class="b-work" style="width:0%"></span></div>
+          <p id="nota-50" class="hint" style="margin-top:8px;"></p>
+        </div>
+
+        <!-- Alternancia A/B automática (sin “modo”) -->
+        <div>
+          <label class="hint">Alternancia de ejercicios (sin escribirlos todos)</label>
+          <div class="card" style="padding:12px">
+            <div class="chips">
+              <span class="chip">Grupo A = pares</span>
+              <span class="chip">Grupo B = impares</span>
+            </div>
+            <div class="sep"></div>
+            <p id="alt-msg" class="hint" style="margin:0 0 6px"></p>
+            <ul class="hint" style="margin:0 0 6px 18px">
+              <li><b>Técnico:</b> elige 1 ejercicio de tu <span id="alt-tech"></span>.</li>
+              <li><b>Teórico:</b> elige 1 ejercicio de tu <span id="alt-theo"></span>.</li>
+              <li><b>Obras:</b> mantén 2–3 canciones prioritarias y rota cada semana.</li>
+            </ul>
+            <p class="hint" style="margin:6px 0 0">Tip: hoy es <b id="alt-today"></b>. Mañana será el otro grupo. Avanza por variación, no por repetición ciega.</p>
+          </div>
+
+          <div class="sep"></div>
+          <label class="hint">Preferencia dentro del 50% Técnico+Teórico</label>
+          <div class="row">
+            <input type="range" id="slider-tech" min="0" max="100" value="50" />
+            <span class="badge"><span id="lbl-tech">50</span>% Técnico · <span id="lbl-theo">50</span>% Teórico</span>
+          </div>
+          <div class="row" style="margin-top:6px">
+            <button class="btn ghost small preset" data-min="10">Hoy 10 min</button>
+            <button class="btn ghost small preset" data-min="15">Hoy 15 min</button>
+            <button class="btn ghost small preset" data-min="25">Hoy 25 min</button>
+            <button class="btn ghost small preset" data-min="30">Hoy 30 min</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Horario semanal con hora y duración -->
+    <section class="card" style="margin-top:16px">
+      <h2>Mi horario semanal</h2>
+      <p class="hint">Define la <b>hora de inicio</b> y la <b>duración</b> por día. Se guarda automáticamente en tu navegador (cada estudiante, en su dispositivo).</p>
+      <div class="table">
+        <table aria-label="Horario semanal">
+          <thead>
+            <tr>
+              <th>Día</th>
+              <th>Hora de inicio</th>
+              <th>Duración (min)</th>
+              <th>Reparto sugerido (50/50)</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-horario"></tbody>
+        </table>
+      </div>
+      <p class="footer">Si un día tienes poco tiempo, <b>no elimines componentes</b>: haz 1 técnico, 1 teórico y una sección de tu obra.</p>
+    </section>
+
+    <!-- Guías rápidas -->
+    <section class="grid cols-2" style="margin-top:16px">
+      <div class="card">
+        <h2>Checklist mínimo por sesión</h2>
+        <ul class="hint">
+          <li>✅ 5–10 min calentamiento corporal y vocal.</li>
+          <li>✅ Técnico (≥ 1 ejercicio) — calidad > cantidad.</li>
+          <li>✅ Teórico (≥ 1 ejercicio) — lectura/ritmo/armonía/análisis.</li>
+          <li>✅ Obras — una sección concreta con intención.</li>
+          <li>✅ Nota rápida: ¿qué mejoró?, ¿qué repites mañana?</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>Tips de prioridad</h2>
+        <ul class="hint">
+          <li>⭐ Elige las obras que te <b>gustan</b> o <b>debes</b> sacar.</li>
+          <li>🔁 Alterna ejercicios A/B en la semana.</li>
+          <li>⏳ Si estás corto de tiempo: reduce minutos, no componentes.</li>
+        </ul>
+      </div>
+    </section>
+
+    <p class="footer">Hecho con cariño por Musicala. Tus datos viven en este navegador (localStorage).</p>
+  </div>
+
+  <script>
+    // ===== Estado (localStorage) =====
+    const LS_KEY = 'musicala_rutinas_light_v1';
+    const defaultState = {
+      minutosHoy: 20,
+      sliderTechWithin50: 50,
+      horario: {
+        Lunes:  {hora:'18:00', dur:20},
+        Martes: {hora:'18:00', dur:20},
+        Miércoles:{hora:'18:00', dur:20},
+        Jueves: {hora:'18:00', dur:20},
+        Viernes:{hora:'17:30', dur:20},
+        Sábado: {hora:'10:00', dur:15},
+        Domingo:{hora:'10:30', dur:10},
+      }
+    };
+
+    let state = load();
+    function load(){
+      try{
+        const s = JSON.parse(localStorage.getItem(LS_KEY)||'null');
+        return s ? {...defaultState, ...s, horario:{...defaultState.horario, ...(s.horario||{})}} : structuredClone(defaultState);
+      }catch(e){ return structuredClone(defaultState); }
+    }
+    function save(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
+    function reset(){ state = structuredClone(defaultState); save(); renderAll(); }
+
+    // ===== Util =====
+    const $ = s => document.querySelector(s);
+    const dias = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+    function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
+    function splitToday(total, techShareWithin50){
+      const T = Math.max(0, Number(total)||0);
+      const half = T * 0.5;
+      const tech = Math.round(half * (techShareWithin50/100));
+      const theo = Math.max(0, Math.round(half - tech));
+      const obras = Math.max(0, T - (tech + theo));
+      return {tech,theo,obras,total:T};
+    }
+    function pct(n, t){ return t>0 ? Math.round((n/t)*100) : 0; }
+    function dayAlt(){ const idx = (new Date().getDay()+6)%7; return idx%2===0 ? 'A' : 'B'; }
+
+    // ===== Render =====
+    function renderPlan(){
+      const total = state.minutosHoy;
+      const share = state.sliderTechWithin50;
+      const {tech,theo,obras} = splitToday(total, share);
+
+      $('#minutos-hoy').value = total;
+      $('#slider-tech').value = share;
+      $('#lbl-tech').textContent = share;
+      $('#lbl-theo').textContent = 100 - share;
+
+      $('#out-tech').textContent = tech + ' min';
+      $('#out-theo').textContent = theo + ' min';
+      $('#out-work').textContent = obras + ' min';
+
+      const pT=pct(tech,total), pH=pct(theo,total), pW=pct(obras,total);
+      $('#bar-tech').style.width = pT+'%';
+      $('#bar-theo').style.width = pH+'%';
+      $('#bar-work').style.width = pW+'%';
+
+      const ok = (tech+theo) === Math.round(total*0.5);
+      $('#nota-50').innerHTML = ok
+        ? '✔️ Equilibrio OK: Técnico+Teórico = 50% y Obras = 50%.'
+        : '⚠️ Ajusta minutos o el deslizador para mantener 50% (Técnico+Teórico) y 50% (Obras).';
+    }
+
+    function renderAlternancia(){
+      const alt = dayAlt();
+      $('#alt-msg').innerHTML = alt==='A'
+        ? 'Hoy es <b>Grupo A</b>. Elige 1 ejercicio técnico y 1 teórico de tu Grupo A.'
+        : 'Hoy es <b>Grupo B</b>. Elige 1 ejercicio técnico y 1 teórico de tu Grupo B.';
+      $('#alt-tech').textContent = 'Grupo ' + alt;
+      $('#alt-theo').textContent = 'Grupo ' + alt;
+      $('#alt-today').textContent = 'Grupo ' + alt;
+    }
+
+    function renderHorario(){
+      const tb = $('#tabla-horario'); tb.innerHTML='';
+      dias.forEach(d=>{
+        const tr = document.createElement('tr');
+
+        const tdDia = document.createElement('td'); tdDia.textContent = d;
+
+        const tdHora = document.createElement('td');
+        const hora = document.createElement('input'); hora.type='time';
+        hora.value = (state.horario[d]?.hora) || '';
+        hora.addEventListener('input', ()=>{
+          state.horario[d] = state.horario[d] || {hora:'',dur:0};
+          state.horario[d].hora = hora.value; save(); renderHorario();
+        });
+        tdHora.appendChild(hora);
+
+        const tdDur = document.createElement('td');
+        const dur = document.createElement('input'); dur.type='number'; dur.min=0; dur.step=5;
+        dur.value = (state.horario[d]?.dur) ?? 0;
+        dur.addEventListener('input', ()=>{
+          const val = clamp(Number(dur.value||0),0,600);
+          state.horario[d] = state.horario[d] || {hora:'',dur:0};
+          state.horario[d].dur = val; save(); renderHorario();
+        });
+        tdDur.appendChild(dur);
+
+        const tdSplit = document.createElement('td');
+        const s = splitToday(state.horario[d]?.dur||0, 50);
+        tdSplit.innerHTML = `
+          <span class="badge">Téc: ${s.tech}m</span>
+          <span class="badge">Teo: ${s.theo}m</span>
+          <span class="badge">Obras: ${s.obras}m</span>
+        `;
+
+        tr.appendChild(tdDia); tr.appendChild(tdHora); tr.appendChild(tdDur); tr.appendChild(tdSplit);
+        tb.appendChild(tr);
+      });
+    }
+
+    function renderAll(){ renderPlan(); renderAlternancia(); renderHorario(); }
+
+    // ===== Eventos =====
+    document.getElementById('btn-calcular').addEventListener('click', ()=>{
+      const v = Number(document.getElementById('minutos-hoy').value||0);
+      state.minutosHoy = clamp(v,0,10000); save(); renderPlan();
+    });
+    document.getElementById('slider-tech').addEventListener('input', e=>{
+      state.sliderTechWithin50 = clamp(Number(e.target.value||50),0,100); save(); renderPlan();
+    });
+    document.querySelectorAll('.preset').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        state.minutosHoy = Number(btn.dataset.min); save(); renderPlan();
+      });
+    });
+    document.getElementById('btn-reset').addEventListener('click', ()=>{
+      if(confirm('Esto restablecerá los datos a los valores iniciales. ¿Continuar?')) reset();
+    });
+
+    // Init
+    renderAll();
+  </script>
+</body>
+</html>
